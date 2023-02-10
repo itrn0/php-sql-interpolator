@@ -16,6 +16,11 @@ class SqlInterpolator
     {
         $placeholders = [];
         foreach ($values as $value) {
+            if (PHP_MAJOR_VERSION >= 8 && PHP_MINOR_VERSION >= 1) {
+                if (is_object($value) && is_a($value, '\\BackedEnum')) {
+                    $value = $value->value;
+                }
+            }
             $placeholders[] = $this->add($value);
         }
         return implode(',', $placeholders);
